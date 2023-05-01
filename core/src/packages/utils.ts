@@ -478,3 +478,105 @@ pkg.createNonEventSchema({
     });
   },
 });
+
+pkg.createNonEventSchema({
+  name: "8-bit Int to Bools",
+  variant: "Pure",
+  run({ ctx }) {
+    var array = Math.abs(ctx.getInput("input")).toString(2).slice(-8).split("").map(Number).map(Boolean)
+    var arrayLength = array.length
+    for (var i = 0; i < (8-arrayLength); i++) array.unshift(false)
+    for (var j = 0, i = 7; j < 8; j++, i--) ctx.setOutput(`bit${i}`, array[j])
+    },
+  generateIO(t) {
+    t.dataInput({
+      id: "input",
+      type: types.int()
+    });
+    t.dataOutput({
+      id: "bit7",
+      name: "Highest bit",
+      type: types.bool()
+    });
+    t.dataOutput({
+      id: "bit6",
+      type: types.bool()
+    });
+    t.dataOutput({
+      id: "bit5",
+      type: types.bool()
+    });
+    t.dataOutput({
+      id: "bit4",
+      type: types.bool()
+    });
+    t.dataOutput({
+      id: "bit3",
+      type: types.bool()
+    });
+    t.dataOutput({
+      id: "bit2",
+      type: types.bool()
+    });
+    t.dataOutput({
+      id: "bit1",
+      type: types.bool()
+    });
+    t.dataOutput({
+      id: "bit0",
+      name: "Lowest bit",
+      type: types.bool()
+    });
+  },
+})
+
+pkg.createNonEventSchema({
+  name: "8 Bools to Int",
+  variant: "Pure",
+  run({ ctx }) {
+    var intVal = Number(ctx.getInput("bit0")) | Number(ctx.getInput("bit1")) << 1 | Number(ctx.getInput("bit2")) << 2 
+    | Number(ctx.getInput("bit3")) << 3 | Number(ctx.getInput("bit4")) << 4 | Number(ctx.getInput("bit5")) << 5
+    | Number(ctx.getInput("bit6")) << 6 | Number(ctx.getInput("bit7")) << 7;
+    ctx.setOutput("output", intVal)
+  },
+  generateIO(t) {
+    t.dataOutput({
+      id: "output",
+      type: types.int()
+    });
+    t.dataInput({
+      id: "bit7",
+      name: "Highest bit",
+      type: types.bool()
+    });
+    t.dataInput({
+      id: "bit6",
+      type: types.bool()
+    });
+    t.dataInput({
+      id: "bit5",
+      type: types.bool()
+    });
+    t.dataInput({
+      id: "bit4",
+      type: types.bool()
+    });
+    t.dataInput({
+      id: "bit3",
+      type: types.bool()
+    });
+    t.dataInput({
+      id: "bit2",
+      type: types.bool()
+    });
+    t.dataInput({
+      id: "bit1",
+      type: types.bool()
+    });
+    t.dataInput({
+      id: "bit0",
+      name: "Lowest bit",
+      type: types.bool()
+    });
+  },
+})
